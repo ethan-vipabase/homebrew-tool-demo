@@ -1,6 +1,6 @@
 class ToolDemo < Formula
     desc "Tool demo for devops"
-    homepage "https://github.com/ethan-vipabase/homebrew-tool-demo.git"
+    homepage "https://github.com/ethan-vipabase/homebrew-tool-demo"
     url "https://github.com/ethan-vipabase/homebrew-tool-demo/releases/download/v1.0/tool_demo_v1.0_macos.zip"
     sha256 "678592b63f545f84160db8adac533e6722afe79253059da851be757ecaa0d181"
     version "1.0.0"
