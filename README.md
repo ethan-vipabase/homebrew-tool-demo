@@ -10,16 +10,16 @@ This repo is to demo how to distribute a custom tool via Homebrew. The custom to
    -  Compile: `shc -f tool-demo.sh -o tool-demo`
 3. Zip the compiled binary file: `zip tool-demo-v1.0.1-macos.zip tool-demo`
 4. Get checksum of the zip file, the sha256 value will be added into formula file `tool-demo.rb`: `shasum -a 256 tool-demo-v1.0.1-macos.zip`
-5. Create formula file with info:
+5. Create formula file with some important info, see more details here `tool-demo.rb`:
    - `sha256`: is the sha256 value of the zip file. It is to check the integrity of the zip file in the `url` field.
    - `url`: This is the link of the zip file. To get it. You need to create a new release version in GitHub page:
-     -  Tag a new release version, for exmple v1.0.1 `git tag -a v1.0.1 -m "Release v1.0.1"` and `git push original v1.0.0.1`,
+     -  Tag a new release version, for exmple v1.0.1 `git tag -a v1.0.1 -m "Release v1.0.1"` and `git push original v1.0..1`,
      -  In the Github page, create a new release with tag `v1.0.1`, and upload the zip file in this release.
     - `version`: "1.0.1", `brew` uses this value to upgrade/downgrade the version of the tool in your machine.
     - `homepage`: It's Github page `username/repo-name`
     - Notice: in the `install` function, `bin.install` should receive the file name of the binary `tool-demo`
     - the other info...
-6. Remember increasing the version for each release.
+6. Remember increasing the semantic version for each release.
 
 ## How to install it
 
@@ -51,6 +51,25 @@ or just run `install.sh` script in a single command:
 curl -fsSL https://raw.githubusercontent.com/ethan-vipabase/homebrew-tool-demo/HEAD/install.sh | bash
 
 ```
+
+To update/upgrade to the new version, run:
+
+```sh
+
+# check current install version
+brew list --version tool-demo
+
+# check info of the tool-demo
+brew info tool-demo
+
+# get new version repo in (opt/homebrew/Library/Taps/username/repo-name)
+brew update
+
+# update to the latest version
+brew upgrade tool-demo
+
+```
+
 
 ## How to test it
 
