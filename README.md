@@ -1,29 +1,39 @@
 ## Purpose
 
-This repo is to demo how to distribute a custom tool via Homebrew. The custom tool is compiled into an executable binary file.
+This repo is to demo how to distribute a custom tool via Homebrew on macOS|Linux. The custom tool is compiled into an executable binary file.
 
 ## How to build it
 
-1. Create the main POSIX script: `tool-demo.sh`
+1. Create the main POSIX script: `tool-demo.sh` with shebang `#!/bin/sh`
 2. Compile the script to the executable binary file:
    - Install `shc` tool if not exist: `brew install shc`
    -  Compile: `shc -f tool-demo.sh -o tool-demo`
 3. Zip the compiled binary file: `zip tool-demo-v1.0.1-macos.zip tool-demo`
 4. Get checksum of the zip file, the sha256 value will be added into formula file `tool-demo.rb`: `shasum -a 256 tool-demo-v1.0.1-macos.zip`
-5. Create formula file with some important info, see more details here `tool-demo.rb`:
-   - `sha256`: is the sha256 value of the zip file. It is to check the integrity of the zip file in the `url` field.
-   - `url`: This is the link of the zip file. To get it. You need to create a new release version in GitHub page:
-     -  Tag a new release version, for exmple v1.0.1 `git tag -a v1.0.1 -m "Release v1.0.1"` and `git push original v1.0..1`,
-     -  In the Github page, create a new release with tag `v1.0.1`, and upload the zip file in this release.
-    - `version`: "1.0.1", `brew` uses this value to upgrade/downgrade the version of the tool in your machine.
-    - `homepage`: It's Github page `username/repo-name`
-    - Notice: in the `install` function, `bin.install` should receive the file name of the binary `tool-demo`
+5. Create the formula file with some important info, see more details here `tool-demo.rb`:
+   - The formula's class name is build from its file name in kebab-case, `tool-demo.rb` --> `class ToolDemo < Formula`. Notice: `brew` command will work with formula name `tool-demo`.
+   - `sha256`: It is sha256 value at step `#4`. It is to check the integrity of the zip file in the `url` field.
+   - `url`: This is the link of the zip file. To create it. You need to create a new release version in GitHub page by following steps:
+     -  Tag a new release version, for exmple v1.0.1 `git tag -a v1.0.1 -m "Release v1.0.1"` and `git push original v1.0.1`,
+     -  In the Github page, create a new release with tag `v1.0.1`, and upload the zip file (at step `#3`) in this release.
+    - `version`: "1.0.1", it is sematic version. `brew` uses this value to upgrade/downgrade the version of the tool in your machine.
+    - `homepage`: It's the Github page `https://github.com/username/repo-name`
+    - Notice: in the `def install` function, `bin.install` should receive the file name of the binary `tool-demo` in the zip file.
     - the other info...
-6. Remember increasing the semantic version for each release.
+6. Remember increasing the `semantic` version for each release. `brew ` uses semantic version to determine what newer version is.
 
 ## How to install it
 
-You can install it in 2 steps:
+You can install the tool automatically by running `install.sh` script in a single command:
+
+
+```sh
+
+curl -fsSL https://raw.githubusercontent.com/ethan-vipabase/homebrew-tool-demo/HEAD/install.sh | bash
+
+```
+
+Or you can also install the tool manualy by 2 steps:
 
 ```sh
 
@@ -43,20 +53,13 @@ brew install tool-demo
 
 ```
 
-or just run `install.sh` script in a single command:
 
-
-```sh
-
-curl -fsSL https://raw.githubusercontent.com/ethan-vipabase/homebrew-tool-demo/HEAD/install.sh | bash
-
-```
 
 To update/upgrade to the new version, run:
 
 ```sh
 
-# check current install version
+# check current installed version
 brew list --version tool-demo
 
 # check info of the tool-demo
@@ -73,7 +76,7 @@ brew upgrade tool-demo
 
 ## How to test it
 
-- Ensure that `/opt/homebrew/bin`  path was added to `$PATH` in the most left: `PATH="/opt/homebrew/bin:$PATH"` in the shell profile (either `~/.zshrc` if using zsh by default or `~/.bash_profile` if using bash shell by default)
+- Ensure that `/opt/homebrew/bin`  path was added to `$PATH` in the most left, add a new line `export PATH="/opt/homebrew/bin:$PATH"` in the shell profile (either `~/.zshrc` if using zsh by default or `~/.bash_profile` if using bash shell by default)
 - After install the tool successfully, you run the `tool-demo` command in Terminal at anywhere:
 
 
