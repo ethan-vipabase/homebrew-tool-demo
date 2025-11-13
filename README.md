@@ -48,7 +48,7 @@ or just run `install.sh` script in a single command:
 
 ```sh
 
-curl -fsSL https://raw.githubusercontent.com/ethan-vipabase/homebrew-tool-demo/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ethan-vipabase/homebrew-tool-demo/HEAD/install.sh | bash
 
 ```
 

@@ -4,7 +4,7 @@
 
 # Script to install tool-demo via Homebrew
 # Format link: https://raw.githubusercontent.com/[owner]/[repo]/[branch-or-tag]/[path/to/file]
-# Run: curl -fsSL https://raw.githubusercontent.com/ethan-vipabase/homebrew-tool-demo/main/install.sh | bash
+# Run: curl -fsSL https://raw.githubusercontent.com/ethan-vipabase/homebrew-tool-demo/HEAD/install.sh | bash
 
 set -euo pipefail # strict mode: exit on error, undefined variable, or error in pipeline
 
@@ -42,16 +42,32 @@ tap_and_install_tool_demo() {
 
     # download GitHub repo ethan-vipabase/homebrew-tool-demo into /opt/homebrew/Library/Taps/ethan-vipabase/homebrew-tool-demo
     echo "Tapping the repository $tap_name..."
-    brew tap ethan-vipabase/homebrew-tool-demo
+
+   if ! brew tap | grep -q "^$tap_name\$"; then
+        brew tap $tap_name
+        echo "Tapped $tap_name successfully."
+    else
+        echo "Repository $tap_name is already tapped. Updating..."
+        brew update # get latest .rd
+    fi
+
 
     # install tool-demo
     # The excecutable will be installed into /opt/homebrew/Cellar/tool-demo/<version>/bin/tool-demo
     # The symlink will be created in /opt/homebrew/bin/tool-demo
     # To run the tool-demo, just type "tool-demo" in the terminal
     echo "Installing tool-demo..."
+
+    if brew list --formula | grep -q "^$formula_name\$"; then
+        echo "tool-demo is already installed. Upgrading to the latest version..."
+        brew upgrade $formula_name
+        echo "tool-demo upgraded successfully."
+        return
+    fi
+
     brew install $formula_name
 
-    echo "tool-demo installed successfully. You can run `tool-demo help` to see usage."
+    echo "tool-demo installed successfully."
 
 }
 
@@ -63,7 +79,5 @@ main() {
     tap_and_install_tool_demo
 }
 
-# Run the main function if script is called directly
-if [ "${BASH_SOURCE[0]}" = "$0" ]; then
-    main "$@"
-fi
+# entry point
+ main
